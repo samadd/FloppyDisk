@@ -1,2 +1,5 @@
 # FloppyDisk
-Save data on a web app and synch with server-held data.
+Wraps html5 localstorage in an api which tracks type, timestamps writes for server-side synchronisation, and can observe and autosave application state.
+
+##TODO
+Loads.
