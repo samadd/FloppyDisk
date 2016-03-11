@@ -4,7 +4,8 @@
     'use strict';
     
     var localStore = window.localStorage,
-        validTypes = ["string", "number", "object", "date"];
+        validTypes = ["string", "number", "object", "date"],
+        rootAppState;
     
     function extractValue(val) {
         var returnVal;
@@ -23,6 +24,12 @@
             returnVal = val;
         }
         return returnVal;
+    }
+    
+    function isObjectOrArray(v) {
+        var toClass = {}.toString;
+        var classType = toClass.call(v);
+        return classType === "[object Object]" || classType === "[object Array]";
     }
     
     function Value(val, type) {
@@ -59,6 +66,7 @@
     }
     
     function clearState() {
+        rootAppState = undefined;
         localStore.clear();
     }
     
@@ -81,13 +89,17 @@
     }
     
     function observe(appState) {
-        writeProperties(appState);
         var handler = {
             set: function (origObj, key, value) {
                 origObj[key] = value;
-                writeProperty(key, value);
+                writeProperties(rootAppState); // clobber everything since we don't know how deep we are
             }
         };
+        for (let key in appState) {
+            if (isObjectOrArray(appState[key])) {
+                appState[key] = observe(appState[key]);
+            } 
+        }
         return new Proxy(appState, handler);
     }
     
@@ -97,8 +109,13 @@
         loadFiles: readProperties,
         loadFile: readProperty,
         format: clearState,
-        autoSave: observe,
-        eject: function () {window.FloppyDisk = DF0;}
+        autoSave: function(appState) {
+            if (rootAppState) {throw new Error('Autosave already initiated. Specify one root object only.');}
+            rootAppState = appState;
+            writeProperties(appState);
+            return observe(appState);
+        },
+        eject: function () {clearState(); window.FloppyDisk = DF0;}
     };
     
     var DF0 = {
