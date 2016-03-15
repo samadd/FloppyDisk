@@ -4,8 +4,9 @@
     'use strict';
     
     var localStore = window.localStorage,
-        validTypes = ["string", "number", "object", "date"],
-        rootAppState;
+        validTypes = ["string", "number", "object", "date", "boolean"],
+        rootAppState,
+        FloppyDisk;
     
     function extractValue(val) {
         var returnVal;
@@ -18,6 +19,7 @@
             break;
         case "string":
         case "object":
+        case "boolean":
             returnVal = val.value;
             break;
         default:
@@ -66,8 +68,13 @@
     }
     
     function clearState() {
-        rootAppState = undefined;
+        clearRootAppState();
         localStore.clear();
+        return FloppyDisk;
+    }
+    
+    function clearRootAppState() {
+        rootAppState = undefined;
     }
     
     function typeSerializer(val, type) {
@@ -103,7 +110,7 @@
         return new Proxy(appState, handler);
     }
     
-    var FloppyDisk = {
+    FloppyDisk = {
         saveFiles: writeProperties,
         saveFile: writeProperty,
         loadFiles: readProperties,
@@ -115,11 +122,11 @@
             writeProperties(appState);
             return observe(appState);
         },
-        eject: function () {clearState(); window.FloppyDisk = DF0;}
+        eject: function () {clearRootAppState(); window.FloppyDisk = DF0; return DF0;}
     };
     
     var DF0 = {
-        insert: function() {window.FloppyDisk = FloppyDisk;}  
+        insert: function() {window.FloppyDisk = FloppyDisk; return FloppyDisk;}  
     };
     
     window.FloppyDisk = DF0;
