@@ -105,12 +105,12 @@
         var handler = {
             set: function (origObj, key, value) {
                 origObj[key] = value;
-                writeProperties(origObj); // clobber everything since we don't know how deep we are
+                writeProperties(rootAppState); // clobber everything since we don't know how deep we are
             },
             deleteProperty: function (origObj, key) {
                 delete origObj[key];
                 deleteProperty(key); //doesn't matter if this isn't top level property - about to clobber anyway - but must in case it is.
-                writeProperties(origObj);
+                writeProperties(rootAppState);
             }
         };
         for (let key in appState) {
