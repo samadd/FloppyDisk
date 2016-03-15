@@ -8,22 +8,28 @@ Loads.
 
 ###FloppyDisk.insert
 You can't use a floppy disk without inserting it into the floppy drive. Call .insert() to notionally insert a floppy disk into the disk drive. Remember, though - you only have one floppy disk.
+
 ####Arguments
 * None
+  
 ####Returns
-  * FloppyDisk with all methods except .insert exposed.
+* FloppyDisk with all methods except .insert exposed.
 
 ###FloppyDisk.eject
 Finished already? What's wrong with you? By calling .eject() you have disabled FloppyDisk. Call .insert() to get back in the game.
+
 ####Arguments
 * None
+
 ####Returns
-  * FloppyDisk with only .insert method exposed.
+* FloppyDisk with only .insert method exposed.
 
 ###FloppyDisk.format
 Clears all values held in local storage. Like wiping a floppy disk good and proper.
+
 ####Arguments
 * None
+
 ####Returns
 * FloppyDisk
 
@@ -40,6 +46,9 @@ Takes an Object representing application state and writes each key / value pair 
     * Array
     * Object
     * Date **Date type will not be retained - will come back as string**
+    
+####Returns
+* Void.
 
 ###FloppyDisk.saveFile
 Writes a single value to localstorage, with optional type hinting. Can only save a top-level property - if you want to save a value in a nested object and keep your saved data isomorphic with application state, you'll need to pass in the top level value, e.g.
@@ -71,28 +80,37 @@ FloppyDisk.saveFile('someprop', appstate.someprop); //Correct, but will obvious 
     * "date"
     * "boolean"
 
+####Returns
+* Void.
+
 ###FloppyDisk.loadFiles
 Rehydrates all values stored into a single object.
+
 ####Arguments
-  * None
+* None
+
 ####Returns
-  * Object representing your application state, with types restored.
+* Object representing your application state, with types restored.
   
 ###FloppyDisk.loadFile
 Rehydrates a specified value stored in local storage.
+
 ####Arguments
-  1. `key` (String)
-    * The particular key to retrieve from local storage.
+1. `key` (String)
+  * The particular key to retrieve from local storage.
+
 ####Returns
-  * Value retrieved by specified key, with type restored.
+* Value retrieved by specified key, with type restored.
   
 ###FloppyDisk.autoSave
 Takes an object representing your application state, and deep-watches for changes to that object, updating localstorage automatically. Will throw an error if initiated more than once. FloppyDisk.eject() and FloppyDisk.format() will prevent further writes to localstorage.
+
 ####Arguments
-  1. `state' (Object)
-    * An object representing application state.
+1. `state' (Object)
+  * An object representing application state.
+
 ####Returns
-  * Proxy Object which you should then use in place of the original `state` object.
+* Proxy Object which you should then use in place of the original `state` object.
 ```javascript
 let appstate = {a:1, b:'foo', c: [1,2,3], d:{foo:'bar'}};
 appstate = FloppyDisk.autoSave(appstate);
