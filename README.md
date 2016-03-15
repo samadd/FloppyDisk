@@ -49,7 +49,7 @@ Takes an Object representing application state and writes each key / value pair 
     * Date **Date type will not be retained - will come back as string**
     
 ####Returns
-* Void.
+* FloppyDisk
 
 ###FloppyDisk.saveFile
 Writes a single value to localstorage, with optional type hinting. Can only save a top-level property - if you want to save a value in a nested object and keep your saved data isomorphic with application state, you'll need to pass in the top level value, e.g.
@@ -82,7 +82,16 @@ FloppyDisk.saveFile('someprop', appstate.someprop); //Correct, but will obvious 
     * "boolean"
 
 ####Returns
-* Void.
+* FloppyDisk
+
+###FloppyDisk.deleteFile
+Deletes a specific 'file' from local storage.
+
+###Arguments
+1. `key` (String)
+
+####Returns
+* FloppyDisk
 
 ###FloppyDisk.loadFiles
 Rehydrates all values stored into a single object.

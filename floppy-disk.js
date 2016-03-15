@@ -46,10 +46,12 @@
         for (let key in stateObj) {
             writeProperty(key, stateObj[key]);
         }
+        return FloppyDisk;
     }
     
     function writeProperty(key, val, type) {
         localStore.setItem(key, typeSerializer(val, type) );
+        return FloppyDisk;
     }
     
     function readProperties() {
@@ -64,6 +66,11 @@
     function readProperty(key) {
         var serialProp = localStore.getItem(key);
         return jsonDeserializer(serialProp);
+    }
+    
+    function deleteProperty(key) {
+        localStore.removeItem(key);
+        return FloppyDisk;
     }
     
     function clearState() {
@@ -98,7 +105,12 @@
         var handler = {
             set: function (origObj, key, value) {
                 origObj[key] = value;
-                writeProperties(rootAppState); // clobber everything since we don't know how deep we are
+                writeProperties(origObj); // clobber everything since we don't know how deep we are
+            },
+            deleteProperty: function (origObj, key) {
+                delete origObj[key];
+                deleteProperty(key); //doesn't matter if this isn't top level property - about to clobber anyway - but must in case it is.
+                writeProperties(origObj);
             }
         };
         for (let key in appState) {
@@ -114,6 +126,7 @@
         saveFile: writeProperty,
         loadFiles: readProperties,
         loadFile: readProperty,
+        deleteFile: deleteProperty,
         format: clearState,
         autoSave: function(appState) {
             if (rootAppState) {throw new Error('Autosave already initiated. Specify one root object only.');}
