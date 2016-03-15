@@ -5,6 +5,7 @@
     
     var localStore = window.localStorage,
         validTypes = ["string", "number", "object", "date", "boolean"],
+        toClass = {}.toString,
         rootAppState,
         FloppyDisk;
     
@@ -29,7 +30,6 @@
     }
     
     function isObjectOrArray(v) {
-        var toClass = {}.toString;
         var classType = toClass.call(v);
         return classType === "[object Object]" || classType === "[object Array]";
     }
@@ -96,7 +96,8 @@
         try {
             deserializedObj = JSON.parse(str);
         } catch (e) {
-            console.error("Failed to parse text as JSON. Must not be valid JSON.");
+            console.error("Failed to parse text '"+ str + "' as JSON. Probably an existing string in local storage. Returning plain text value.");
+            deserializedObj = {type:"string", value:str};
         }
         return extractValue(deserializedObj);
     }
@@ -104,13 +105,18 @@
     function observe(appState) {
         var handler = {
             set: function (origObj, key, value) {
+                if (isObjectOrArray(value)) {
+                    value = observe(value);
+                }
                 origObj[key] = value;
                 writeProperties(rootAppState); // clobber everything since we don't know how deep we are
+                return true;
             },
             deleteProperty: function (origObj, key) {
                 delete origObj[key];
                 deleteProperty(key); //doesn't matter if this isn't top level property - about to clobber anyway - but must in case it is.
                 writeProperties(rootAppState);
+                return true;
             }
         };
         for (let key in appState) {
