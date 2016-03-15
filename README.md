@@ -2,12 +2,13 @@
 Wraps html5 localstorage in an api which tracks type and can observe and autosave application state. Intended for cases in which you wish your web app could just save some data to a user's floppy disk, or more reasonably cases in which you want to use html5 localstorage, but with a bit more flexibility than the bare key:value(String) structure that it provides.
 
 ##TODO
-Loads.
+1. Error handling - what happens when size is exceeded?
+2. Handle edge cases
 
 ##Methods
 
 ###FloppyDisk.insert
-You can't use a floppy disk without inserting it into the floppy drive. Call .insert() to notionally insert a floppy disk into the disk drive. Remember, though - you only have one floppy disk.
+You can't use a floppy disk without inserting it into the floppy drive. Call FloppyDisk.insert() to notionally insert a floppy disk into the disk drive. Remember, though - you only have one floppy disk. They are hard to come by these days.
 
 ####Arguments
 * None

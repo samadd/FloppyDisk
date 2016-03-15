@@ -39,7 +39,6 @@
             throw new Error("Unsupported type. Not saved. Condemned.");
         }
         this.type = (type || typeof val);
-        this.date = new Date();
         this.value = val;
     }
     
