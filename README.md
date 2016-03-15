@@ -4,6 +4,7 @@ Wraps html5 localstorage in an api which tracks type and can observe and autosav
 ##TODO
 1. Error handling - what happens when size is exceeded?
 2. Handle edge cases
+3. More tests.
 
 ##Methods
 
