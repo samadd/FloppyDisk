@@ -72,7 +72,7 @@ FloppyDisk.saveFile('someprop', appstate.someprop); //Correct, but will obvious 
     * Array
     * Object
     * Date
-    * Any custom type **Must be suitable for Array or key/val Object representation, and specified via `type` parameter.
+    * Any custom type **Must be suitable for Array or key/val Object representation, and specified via `type` parameter.**
 3. `type` (String)
   * Provides type hint. Useful to ensure a date comes back as a date and not a string, or if you have a custom type that could be stored as a serialized array or object.
   * Acceptable values:
@@ -111,7 +111,8 @@ Rehydrates a specified value stored in local storage.
   * The particular key to retrieve from local storage.
 
 ####Returns
-* Value retrieved by specified key, with type restored.
+* Value retrieved by specified `key`, with type restored.
+  * Returns undefined if the `key` does not exist.
   
 ###FloppyDisk.autoSave
 Takes an object representing your application state, and deep-watches for changes to that object, updating localstorage automatically. Will throw an error if initiated more than once. FloppyDisk.eject() and FloppyDisk.format() will prevent further writes to localstorage.

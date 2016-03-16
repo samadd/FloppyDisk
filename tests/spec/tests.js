@@ -56,6 +56,27 @@
             );
         });
         
+        localStorage.clear();
+        
+        describe('loadFile', function() {
+            it(
+                'Should return undefined when calling a non-existent key',
+                function() {
+                    var result = FloppyDisk.loadFile('nosuchkey');
+                    expect(result).toBe(undefined);
+                }
+            );
+            it (
+                'Should return the string value of an existing non-FloppyDisk localstorage key',
+                function() {
+                    var testString = 'blabla', result;
+                    localStorage.setItem('alienkey', testString);
+                    result = FloppyDisk.loadFile('alienkey');
+                    expect(result).toEqual(testString);
+                }
+            );
+        });
+        
     });
     
 }());

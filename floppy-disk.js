@@ -6,6 +6,7 @@
     var localStore = window.localStorage,
         validTypes = ["string", "number", "object", "date", "boolean"],
         toClass = {}.toString,
+        undefinedVal = {type:"undefined", value:undefined},
         rootAppState,
         FloppyDisk;
     
@@ -21,6 +22,7 @@
         case "string":
         case "object":
         case "boolean":
+        case "undefined":
             returnVal = val.value;
             break;
         default:
@@ -34,6 +36,9 @@
         return classType === "[object Object]" || classType === "[object Array]";
     }
     
+    /**
+    * @constructor
+    */
     function Value(val, type) {
         if (type && validTypes.indexOf(type) === -1) {
             throw new Error("Unsupported type. Not saved. Condemned.");
@@ -44,7 +49,7 @@
     
     function writeProperties(stateObj) {
         for (let key in stateObj) {
-            writeProperty(key, stateObj[key]);
+            writeProperty(key, stateObj[key], undefined);
         }
         return FloppyDisk;
     }
@@ -58,14 +63,14 @@
         var obj = {};
         for (let i =0, ilength = localStore.length; i < ilength; i++) {
             let key = localStore.key(i);
-            obj[key] = jsonDeserializer(localStore.getItem(key));
+            obj[key] = jsonDeserializer(localStore.getItem((key || "")));
         }
         return obj;
     }
     
     function readProperty(key) {
         var serialProp = localStore.getItem(key);
-        return jsonDeserializer(serialProp);
+        return jsonDeserializer((serialProp));
     }
     
     function deleteProperty(key) {
@@ -94,7 +99,7 @@
     function jsonDeserializer(str) {
         var deserializedObj;
         try {
-            deserializedObj = JSON.parse(str);
+            deserializedObj = (typeof str === "string") ? JSON.parse(str) : undefinedVal;
         } catch (e) {
             console.error("Failed to parse text '"+ str + "' as JSON. Probably an existing string in local storage. Returning plain text value.");
             deserializedObj = {type:"string", value:str};
